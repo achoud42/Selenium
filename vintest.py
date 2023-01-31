@@ -54,7 +54,9 @@ def getdata(vin) :
   try:
     cookies = '//*[@id="onetrust-accept-btn-handler"]'
     nextButton = driver.find_element("xpath",cookies)
-    nextButton.click()
+    #nextButton.click()
+    driver.execute_script("arguments[0].click();", nextButton)
+
   except:
     print("cookies not found")
   
@@ -70,7 +72,10 @@ i = 0
 while i < 1000:
   vin = getRandomVin()
   print(vin)
-  getdata(vin)
+  try:
+   getdata(vin)
+  except :
+   print("Something went wrong for " + vin)
   i=i+1
 
 
