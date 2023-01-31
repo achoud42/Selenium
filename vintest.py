@@ -1,4 +1,3 @@
-#from datetime import time
 import time
 import requests
 
@@ -9,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium_stealth import stealth
 import undetected_chromedriver as uc
+from constant import *
 
 #proxy ='154.12.105.207:8800'
 options = webdriver.ChromeOptions()
@@ -32,8 +32,8 @@ options.add_argument("disable-infobars")
 #print('Enter the gmailid and password')//*[@id="vin-form"]/div[1]/button/span[2]
 #
 def getRandomVin():
-  url = 'https://randomvin.com/getvin.php?type=real'
-  vin = requests.get(url).text
+  #randomVinUrl = 'https://randomvin.com/getvin.php?type=real'
+  vin = requests.get(randomVinUrl).text
   return vin
 
 driver = webdriver.Chrome(ChromeDriverManager().install())
@@ -47,35 +47,38 @@ stealth(driver,
         fix_hairline=True,
         )
 def getdata(vin) :
-  driver.get('https://www.carfax.eu/')
+  driver.get(carfaxUrl)
   driver.implicitly_wait(5)
-  vinfield=driver.find_element(By.NAME, 'vin-search-default')
+  vinfield=driver.find_element(By.NAME, vinSearchXpath)
   vinfield.send_keys(vin)
   try:
-    cookies = '//*[@id="onetrust-accept-btn-handler"]'
+    #cookies = '//*[@id="onetrust-accept-btn-handler"]'
+    
     nextButton = driver.find_element("xpath",cookies)
     #nextButton.click()
     driver.execute_script("arguments[0].click();", nextButton)
 
+    print("Accepted cookies")
   except:
     print("cookies not found")
   
-  arrow='//*[@id="__next"]/div/div/main/div/div[1]/div[1]/div/div/div/div/div/form/button/div'
+  #arrow='//*[@id="__next"]/div/div/main/div/div[1]/div[1]/div/div/div/div/div/form/button/div'
+  time.sleep(2)
   
-  nextButton1 = driver.find_element("xpath",arrow)
+  nextButton1 = driver.find_element("xpath",nextArrowXpath)
   nextButton1.click()
-  records = '//*[@id="__next"]/div/div/main/div/div[1]/div[2]/h1'
+  #records = '//*[@id="__next"]/div/div/main/div/div[1]/div[2]/h1'
   print(vin)
-  print(str(driver.find_element("xpath", records).text).strip())
+  print(str(driver.find_element("xpath", recordsXpath).text).strip())
 
 i = 0
 while i < 1000:
   vin = getRandomVin()
   print(vin)
-  try:
-   getdata(vin)
+  try :
+    getdata(vin)
   except :
-   print("Something went wrong for " + vin)
+    print("something went wrong for " + vin)
   i=i+1
 
 
