@@ -48,7 +48,7 @@ stealth(driver,
         )
 def getdata(vin) :
   driver.get('https://www.carfax.eu/')
-  driver.implicitly_wait(15)
+  driver.implicitly_wait(5)
   vinfield=driver.find_element(By.NAME, 'vin-search-default')
   vinfield.send_keys(vin)
   try:
